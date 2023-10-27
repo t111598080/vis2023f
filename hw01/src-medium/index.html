@@ -2,7 +2,8 @@
 
 <head>
     <meta charset="utf-8">
-    <script src="./d3.v3.min.js"></script>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <!---script src="./d3.v3.min.js"></script-->
     <style>
         /* @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@900&display=swap'); */
 
@@ -223,7 +224,7 @@
             .attr("height", function (d, i) { return (i + 1) * 60; });
 
 
-        d3.text("./csv/data.csv", function (data) {
+        d3.text('./csv/data.csv', function (data) {
 
             var parsedCSV = d3.csv.parseRows(data);
             parsedCSV = d3.csv.parseRows(data);
