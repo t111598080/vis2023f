@@ -74,11 +74,22 @@
             // Math.random() 會回傳一個偽隨機小數 (pseudo-random) 介於 0 到 1 之間(包含 0，不包含 1) 
             // str.substring(indexStart[, indexEnd])
             // number.toString(radix) 10個數字 + 26個英文字母 = 36
-            a3[i][4] = (Math.random() + 1).toString(36).substring(2);
 
+            function makeid(length) {
+                let result = '';
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const charactersLength = characters.length;
+                let counter = 0;
+                while (counter < length) {
+                    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    counter += 1;
+                }
+                return result;
+            }
+            a3[i][4] = makeid(10);
 
             for (var j = 5; j < a3[0].length; j++) {
-                a3[i][j] = Math.floor(Math.random() * 10);
+                a3[i][j] = Math.floor(Math.random() * 11);
             }
         }
         //alert(a3);
