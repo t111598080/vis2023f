@@ -228,7 +228,7 @@
             // console.log(data);
             var parsedCSV = d3.csv.parseRows(data);
             parsedCSV = d3.csv.parseRows(data);
-            console.log(parsedCSV);
+            //console.log(parsedCSV);
 
             var container = d3.select("#div2")
                 .append("table")
@@ -240,7 +240,7 @@
                 .data(function (d) { return d; }).enter()
                 .append("td")
                 .html(function (d, i) {
-                    if (i == 4 && d != 'GitHub 帳號') {
+                    if (i == 4 && d != 'GitHub') {
                         return '<a href="https://' + d + '.github.io/vis2023f/" target="_blank"><img src="https://' + d + '.github.io/vis2023f/hw00/me.jpg"></a>' + '<hr><a href="https://github.com/' + d + '/vis2023f/" target="_blank">' + d + '</a>';
                     }
                     else if (i == 0 || i == 2 || isNaN(d)) {
