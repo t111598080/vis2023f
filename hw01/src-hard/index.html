@@ -178,111 +178,116 @@
 <body>
     <h3>Data Visualization 成績</h3>
 
-    <div id="div1"></div>
-
-    <div id="div2"></div>
+    <div id="div2" class="chart"></div>
 
     <script type="text/javascript" charset="utf-8">
-        d3.select("#div1")
-            .append("table")
-            .append("tr")
-            .selectAll("td")
-            .data([10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0])
-            .enter()
-            .append("td")
-            .text(function (d, i) {
-                if (i <= 10 || isNaN(d)) {
-                    return d;
-                }
-            })
-            // img
-            .attr("class", function (d, i) {
-                if (d == 10) return "excellent-kid";
-                else if (d >= 7) return "good-kid";
-                else if (d >= 2) return "fair-kid";
-                else return "poor-kid";
-            })
-            .append("img")
-            .attr("src", function (d, i) {
-                if (d == 10) return "./svg10/52.svg";
-                else if (d == 9) return "./svg10/51.svg";
-                else if (d == 8) return "./svg10/42.svg";
-                else if (d == 7) return "./svg10/41.svg";
-                else if (d == 6) return "./svg10/32.svg";
-                else if (d == 5) return "./svg10/31.svg";
-                else if (d == 4) return "./svg10/22.svg";
-                else if (d == 3) return "./svg10/21.svg";
-                else if (d == 2) return "./svg10/12.svg";
-                else if (d == 1) return "./svg10/11.svg";
-                else if (d == 0) return "./svg10/01.svg";
-                else return "./svg10/00.svg";
-            })
-            .attr("x", "0")
-            .attr("y", "0")
-            .attr("width", function (d, i) { return (i + 1) * 60; })
-            .attr("height", function (d, i) { return (i + 1) * 60; });
 
-        d3.text('./csv/data.csv').then(function (data) {
+        function createArray(length) {
+            var arr = new Array(length || 0),
+                i = length;
 
-            var parsedCSV = d3.csvParseRows(data);
-            parsedCSV = d3.csvParseRows(data);
-            //console.log(parsedCSV);
+            if (arguments.length > 1) {
+                var args = Array.prototype.slice.call(arguments, 1);
+                while (i--) arr[length - 1 - i] = createArray.apply(this, args);
+            }
 
-            var container = d3.select("#div2")
-                .append("table")
-                .selectAll("tr")
-                .data(parsedCSV)
-                .enter()
-                .append("tr")
-                .selectAll("td")
-                .data(function (d) { return d; }).enter()
-                .append("td")
-                .html(function (d, i) {
-                    if (i == 4 && d != 'GitHub') {
+            return arr;
+        }
+        function onePerson(a) {
+            // console.log(data[0]);
+            const info = [];
+            for (let i = 0; i < 4; i++) {
 
-                        return '<a href="https://' + d + '.github.io/vis2023f/" target="_blank"><img src="https://' + d + '.github.io/vis2023f/hw00/me.jpg"></a>' + '<hr><a href="https://github.com/' + d + '/vis2023f/" target="_blank">' + d + '</a>';
-                    }
-                    else if (i == 0 || i == 2 || isNaN(d)) {
-                        return d;
-                    }
-                })
-                .filter(function (d, i) { return (i > 2 && !isNaN(d) && d != ""); })
-                .attr("class", function (d, i) {
-                    if (d == 10) return "excellent-kid";
-                    else if (d >= 7) return "good-kid";
-                    else if (d >= 2) return "fair-kid";
-                    else return "poor-kid";
-                })
-                .append("img")
-                .attr("src", function (d, i) {
-                    if (d == 10)
-                        return "./svg10/52.svg";
-                    else if (d == 9)
-                        return "./svg10/51.svg";
-                    else if (d == 8)
-                        return "./svg10/42.svg";
-                    else if (d == 7)
-                        return "./svg10/41.svg";
-                    else if (d == 6)
-                        return "./svg10/32.svg";
-                    else if (d == 5)
-                        return "./svg10/31.svg";
-                    else if (d == 4)
-                        return "./svg10/22.svg";
-                    else if (d == 3)
-                        return "./svg10/21.svg";
-                    else if (d == 2)
-                        return "./svg10/12.svg";
-                    else if (d == 1)
-                        return "./svg10/11.svg";
-                    else if (d == 0)
-                        return "./svg10/01.svg";
-                    else
-                        return "./svg10/00.svg";
-                })
-                .attr("width", 50)
-                .attr("height", 50)
-                ;
+                info.push({ info: a[info_list[i]] });
+            }
+            // console.log(info);
+
+            const homeworkData = [];
+            for (let i = 0; i < 10; i++) {
+
+                const key = `作業` + num[i];
+                //const values = {};  
+                homeworkData.push({ homework: key, value: a[key] });
+            }
+            // console.log(homeworkData);
+
+            const width = 360;
+            const height = Math.min(width, 360);
+            const radius = Math.min(width, height) / 2;
+
+            const arc = d3.arc()
+                .innerRadius(radius * 0.67)
+                .outerRadius(radius - 5);
+
+            const pie = d3.pie()
+                .padAngle(1 / radius)
+                .sort(null)
+                .value(d => d.value);
+
+            const color = d3.scaleOrdinal()
+                .domain(homeworkData.map(d => d.homework))
+                .range(d3.quantize(t => d3.interpolateSpectral(t * 0.8 + 0.1), homeworkData.length).reverse());
+
+            const svg = d3.create("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("viewBox", [-width / 2, -height / 2, width, height])
+                .attr("style", "max-width: 100%; height: auto;");
+
+            svg.append("g")
+                .selectAll()
+                .data(pie(homeworkData))
+                .join("path")
+                .attr("fill", d => color(d.data.homework))
+                .attr("d", arc)
+                .append("title")
+                .text(d => `${d.data.homework}: ${d.data.value.toLocaleString()}`);
+
+            svg.append("g")         //將圖上標題
+                .attr("font-family", "sans-serif")
+
+                .attr("text-anchor", "middle")
+                .selectAll()
+                .data(pie(homeworkData))
+                .join("text")
+                .attr("transform", d => `translate(${arc.centroid(d)})`)
+
+                .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.1).append("tspan")
+                    .attr("x", 0)
+                    .attr("font-size", 12)
+                    .attr("y", "0.5em")
+                    .attr("fill-opacity", 1)
+                    .attr("fill", "black")
+                    .attr("font-weight", "bold")
+                    .text(d => d.data.value.toLocaleString("en-US")));
+
+            const central = svg.append("text")
+                .attr("text-anchor", "middle")
+                .attr("font-size", 16) // 設定文字大小
+                .attr("fill", "black"); // 設定文字顏色
+
+            central.selectAll("tspan")
+                .data(info)
+                .enter().append("tspan")
+                .attr("x", 0)
+                .attr("dy", (d, i) => i * 16) // 設定行間距
+                .text(d => d.info)
+                .append("title")
+                .text(d => d.info);
+
+            document.getElementById("div2").appendChild(svg.node());
+        }
+        num = createArray(10);
+        info_list = createArray(4);
+        num = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+        info_list = ['學號', '姓名', '班級', 'GitHub']
+
+        d3.csv('./csv/data.csv').then(function (data) {
+            for (let i = 0; i < data.length; i++) {
+                //console.log(data[i]);
+                onePerson(data[i]);
+            }
+
         });
 
     </script>
