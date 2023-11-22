@@ -1,0 +1,14 @@
+{
+  "name": "ca45422e36064e49",
+  "main": "ca45422e36064e49@136.js",
+  "version": "136.0.0",
+  "homepage": "https://observablehq.com/d/ca45422e36064e49",
+  "author": {
+    "name": "t111598080's Workspace",
+    "url": "https://observablehq.com/@t111598080-ws"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4 - 5"
+  }
+}
