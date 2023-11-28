@@ -1,0 +1,14 @@
+{
+  "name": "bb450c0bafd4552c",
+  "main": "bb450c0bafd4552c@68.js",
+  "version": "68.0.0",
+  "homepage": "https://observablehq.com/d/bb450c0bafd4552c",
+  "author": {
+    "name": "t111598080's Workspace",
+    "url": "https://observablehq.com/@t111598080-ws"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4 - 5"
+  }
+}
